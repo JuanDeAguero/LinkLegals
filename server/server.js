@@ -26,12 +26,12 @@ const openai = new OpenAI({
   ...(baseURL ? { baseURL } : {}),
 })
 
-const systemPromptPath = path.join(__dirname, "system_prompt.txt")
+const systemPromptPath = path.join(__dirname, "q.txt")
 const SYSTEM_PROMPT = fs.readFileSync(systemPromptPath, "utf8")
 
 app.post("/message", async (req, res, next) => {
   try {
-    const { message, conversation } = req.body
+    const { message, conversation, systemPromptType } = req.body
     let messages = []
     if (conversation && Array.isArray(conversation)) {
       messages = conversation
@@ -40,7 +40,9 @@ app.post("/message", async (req, res, next) => {
     } else {
       return res.status(400).json({ error: "No message provided." })
     }
-    messages.unshift({ role: "system", content: SYSTEM_PROMPT })
+    const promptFile = systemPromptType === "n400" ? "n400.txt" : "q.txt"
+    const systemPromptContent = fs.readFileSync(path.join(__dirname, promptFile), "utf8")
+    messages.unshift({ role: "system", content: systemPromptContent })
     const completion = await openai.chat.completions.create({
       model,
       messages,

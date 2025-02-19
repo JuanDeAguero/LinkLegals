@@ -438,14 +438,39 @@ footer {
 .chat-access-button:hover {
   background-color: rgb(50, 132, 255);
 }
-.chat-start-text {
+.chat-start {
   position: absolute;
   width: 100%;
   display: flex;
   justify-content: center;
-  top: -100px;
+  top: -140px;
+  display: flex;
+  flex-direction: column;
+}
+.chat-start-text {
   font-size: 18px;
   text-align: center;
+  margin-bottom: 30px;
+}
+.chat-start-buttons {
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  gap: 10px;
+  overflow: visible;
+}
+.chat-start-button {
+  background-color: rgb(220, 220, 220);
+  height: 30px;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+  font-size: 17px;
+}
+.chat-start-button:hover {
+  background-color: rgb(210, 210, 210);
+  scale: 105%;
 }
 @media only screen and (min-width: 0) and (max-width: 1049px) {
   nav {

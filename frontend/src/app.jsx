@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react
 import { useRef, useState, useEffect } from "react"
 import { SyncLoader } from "react-spinners"
 
-const serverUrl = "https://linklegals.net/"
-//const serverUrl = "http://localhost:3000/"
+//const serverUrl = "https://linklegals.net/"
+const serverUrl = "http://localhost:3000/"
 
 const Home = () => <div className="landing-page">
   <div className="landing-page-content">
@@ -384,19 +384,25 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
           })),
         { role: "user", content: messageText }
       ]
+      const payload = { conversation: conversationForApi }
+      if (promptType) {
+        payload.systemPromptType = promptType
+      }
       const response = await fetch(serverUrl + "message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ conversation: conversationForApi })
+        body: JSON.stringify(payload)
       })
       const data = await response.json()
-      setMessages((prevMessages) => prevMessages.filter((m) => m.id !== loadingMessage.id))
+      setMessages((prevMessages) =>
+        prevMessages.filter((m) => m.id !== loadingMessage.id))
       const serverReplyText = data.reply || ""
       const multilineMessages = createMultilineMessages(serverReplyText)
       setMessages((prevMessages) => [...prevMessages, ...multilineMessages])
     } catch (error) {
       console.error("An error occurred while sending the message:", error)
-      setMessages((prevMessages) => prevMessages.filter((m) => m.id !== loadingMessage.id))
+      setMessages((prevMessages) =>
+        prevMessages.filter((m) => m.id !== loadingMessage.id))
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -408,7 +414,7 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
     } finally {
       setIsLoadingReply(false)
     }
-  }
+  }  
 
   const handleExportCaseAsPDF = async () => {
     if (!loggedIn || isExporting) return
@@ -466,6 +472,18 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
     }
   }, [messages])
 
+  const [promptType, setPromptType] = useState(null)
+
+  const handleStartChat = (type) => {
+    setPromptType(type)
+    setShowStartText(false)
+    if (type === "legal") {
+      sendMessage("Hello, I need help building my case.")
+    } else if (type === "n400") {
+      sendMessage("Hello, I need helping filling up the N-400 intake.")
+    }
+  }  
+
   return (
   <div
     className="page"
@@ -512,7 +530,21 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
         </button>
         <button className="chat-send-button" onClick={() => sendMessage(inputValue)}>SEND</button>
       </div>
-      {showStartText && (<div className="chat-start-text">Let's get started building your case. What do you need help with?</div>)}
+      {showStartText && (
+        <div className="chat-start">
+          <div className="chat-start-text">
+            Let's get started building your case. What do you need help with?
+          </div>
+          <div className="chat-start-buttons">
+            <button className="chat-start-button" onClick={() => handleStartChat("legal")}>
+              Legal & Service Case
+            </button>
+            <button className="chat-start-button" onClick={() => handleStartChat("n400")}>
+              N-400
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   </div>
   )
