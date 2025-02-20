@@ -59,8 +59,7 @@ const About = ({ isMobile, showMenu, scrollY }) => {
   useEffect(() => {
     const updateSection = () => {
       const currentSection = sections.findIndex(
-        (limit, index) => scrollY > sections[index] && scrollY <= sections[index + 1]
-      )
+        (limit, index) => scrollY > sections[index] && scrollY <= sections[index + 1])
       setSection(sectionNumberToName(currentSection))
     }
     updateSection()
@@ -102,65 +101,65 @@ const About = ({ isMobile, showMenu, scrollY }) => {
     return determineGuideStyleHelper(scrollY, refPos, refNextPos)
   }
 
-  return (
-  <div className="page" style={{ overflow: showMenu && isMobile ? "hidden" : "auto", height: showMenu && isMobile ? "calc(100vh - 60px)" : "auto" }}>
-    <div className="about-guide">
-      <button className={"about-guide-button " + determineGuideStyle(0, scrollY)} onClick={() => scrollToElementWithOffset(ourStoryRef, -40)}>Our Story</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(1, scrollY)} onClick={() => scrollToElementWithOffset(innovateRef, -40)}>Innovate, Connect, Empower</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(2, scrollY)} onClick={() => scrollToElementWithOffset(identifyingProblemRef, -40)}>Identifying the Problem</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(3, scrollY)} onClick={() => scrollToElementWithOffset(missionVisionRef, -40)}>Mission and Vision</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(4, scrollY)} onClick={() => scrollToElementWithOffset(initialStepsRef, -40)}>Initial Steps and Development</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(5, scrollY)} onClick={() => scrollToElementWithOffset(innovationCollabRef, -40)}>Innovation and Collaboration</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(6, scrollY)} onClick={() => scrollToElementWithOffset(futureGoalsRef, -40)}>Future Goals</button>
-      <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(7, scrollY)} onClick={() => scrollToElementWithOffset(callToActionRef, -40)}>Call to Action</button>
-      <button className={"about-guide-button " + determineGuideStyle(8, scrollY)} onClick={() => scrollToElementWithOffset(researchRef, -40)}>Research</button>
-      <button className={"about-guide-button " + determineGuideStyle(9, scrollY)} onClick={() => scrollToElementWithOffset(collaborationsRef, -40)}>Collaborations</button>
+  return <>
+    <div className="page" style={{ overflow: showMenu && isMobile ? "hidden" : "auto", height: showMenu && isMobile ? "calc(100vh - 60px)" : "auto" }}>
+      <div className="about-guide">
+        <button className={"about-guide-button " + determineGuideStyle(0, scrollY)} onClick={() => scrollToElementWithOffset(ourStoryRef, -40)}>Our Story</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(1, scrollY)} onClick={() => scrollToElementWithOffset(innovateRef, -40)}>Innovate, Connect, Empower</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(2, scrollY)} onClick={() => scrollToElementWithOffset(identifyingProblemRef, -40)}>Identifying the Problem</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(3, scrollY)} onClick={() => scrollToElementWithOffset(missionVisionRef, -40)}>Mission and Vision</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(4, scrollY)} onClick={() => scrollToElementWithOffset(initialStepsRef, -40)}>Initial Steps and Development</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(5, scrollY)} onClick={() => scrollToElementWithOffset(innovationCollabRef, -40)}>Innovation and Collaboration</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(6, scrollY)} onClick={() => scrollToElementWithOffset(futureGoalsRef, -40)}>Future Goals</button>
+        <button className={"about-guide-button about-guide-subtitle " + determineGuideStyle(7, scrollY)} onClick={() => scrollToElementWithOffset(callToActionRef, -40)}>Call to Action</button>
+        <button className={"about-guide-button " + determineGuideStyle(8, scrollY)} onClick={() => scrollToElementWithOffset(researchRef, -40)}>Research</button>
+        <button className={"about-guide-button " + determineGuideStyle(9, scrollY)} onClick={() => scrollToElementWithOffset(collaborationsRef, -40)}>Collaborations</button>
+      </div>
+      <div className="about-guide-mobile" style={{ visibility: scrollY < 65 && !isMobile ? "collapse" : "visible", position: scrollY < 65 ? "absolute" : "fixed", top: scrollY < 65 ? "5px" : "0", justifyContent: !isMobile && "center", paddingLeft: !isMobile && "0" }}>
+        {scrollY >= 65 && !isMobile && <div className="about-guide-mobile-title"><span className="about-arrow">►</span> {section}</div>}
+        {isMobile && <button className={"about-guide-mobile-button " + determineMobile(ourStoryRef, researchRef)} onClick={() => scrollToElementWithOffset(ourStoryRef, -40)}>1. Our Story</button>}
+        {isMobile && <button className={"about-guide-mobile-button " + determineMobile(researchRef, collaborationsRef)} onClick={() => scrollToElementWithOffset(researchRef, -40)}>2. Research</button>}
+        {isMobile && <button className={"about-guide-mobile-button " + determineMobile(collaborationsRef, null)} onClick={() => scrollToElementWithOffset(collaborationsRef, -40)}>3. Collaborations</button>}
+      </div>
+      <div className="about-title about-first" ref={ourStoryRef}>Our Story</div>
+      <div className="about-subtitle" ref={innovateRef}>Innovate, Connect, Empower</div>
+      <div className="about-text about-quote">“The future of human work is in specific domain expertise. Understanding the challenges and then using autonomously intelligent technology to help us provide solutions.”</div>
+      <div className="about-text about-jensen">- Jensen Huang</div>
+      <div className="about-text">Our journey starts with recognizing the vital role of domain experts in guiding AI to solve real-world problems. In many sectors, experts see the potential of existing technologies if adapted correctly. Instead of waiting for these changes to happen, we took action to create practical AI-driven tools. We saw an opportunity to make AI beneficial for those with fewer resources by helping them share their stories more effectively.</div>
+      <img className="about-img" src="img1.jpg" />
+      <div className="about-subtitle" ref={identifyingProblemRef}>Identifying the Problem</div>
+      <div className="about-text">Many AI innovations are not addressing the needs of underrepresented communities. Specifically, we identified a few key problems to address:</div>
+      <div className="about-text"><span className="about-text-underline">Repetitive Storytelling:</span> Clients expend valuable time and energy recounting their experiences to multiple individuals involved in their case, resulting in fatigue and the omission of important details.</div>
+      <div className="about-text"><span className="about-text-underline">Limited Options:</span> Time constraints force clients to accept less optimal choices.</div>
+      <div className="about-text"><span className="about-text-underline">Document Complexity:</span> The complex nature of many documents renders them difficult for clients to comprehend.</div>
+      <div className="about-text"><span className="about-text-underline">Language Barriers:</span> These barriers pose substantial challenges to accessing legal services.</div>
+      <img className="about-img" src="img2.jpg" />
+      <div className="about-subtitle" ref={missionVisionRef}>Mission and Vision</div>
+      <div className="about-text">Our mission is to innovate, connect, and empower by creating AI solutions that are advanced, accessible, and socially responsible. We envision a platform that prioritizes user safety and confidentiality.</div>
+      <div className="about-subtitle" ref={initialStepsRef}>Initial Steps and Development</div>
+      <div className="about-text">We began with research to understand our audience"s needs. This led to the development of our mobile app, which in its first phase, offers essential services that will be expanded over time. Currently, the app is in the MVP stage with plans to add more features to make a beta version available to our collaborators for testing. This approach combines AI technology with human expertise to ensure accuracy and reliability.</div>
+      <div className="about-subtitle" ref={innovationCollabRef}>Innovation and Collaboration</div>
+      <div className="about-text">We believe in the power of collaboration. By working with partners, we ensure our solutions are grounded in real-world needs. User privacy and safety are central to our development process, and we are committed to maintaining the highest ethical standards.</div>
+      <div className="about-subtitle" ref={futureGoalsRef}>Future Goals</div>
+      <div className="about-text">Looking ahead, we plan to scale our services and introduce new features that will further empower our users. Our goal is to continuously innovate and improve, making our platform a trusted resource for communities around the world.</div>
+      <div className="about-subtitle" ref={callToActionRef}>Call to Action</div>
+      <div className="about-text">Join us on this journey. Whether you’re a potential user, a collaborator, or simply someone who believes in our mission, we welcome you. Together, we can innovate, connect, and empower.</div>
+      <div className="about-title" ref={researchRef}>Research</div>  
+      <div className="about-text">We are committed to research and innovation to better serve our community and service providers. We're developing a mobile app that uses AI to create practical solutions, prioritizing user safety, confidentiality, and ethical use of emerging technologies.</div>
+      <div className="about-text">Our key initiatives include:</div>
+      <div className="about-text"><span className="about-text-underline">User-Centric Design:</span> Ensuring our app is intuitive and accessible to all users, regardless of their tech proficiency.</div>
+      <div className="about-text"><span className="about-text-underline">Continuous Improvement:</span> Regularly updating our technology and practices based on user feedback and advancements in the field.</div>
+      <div className="about-text"><span className="about-text-underline">Community Engagement:</span> Actively involving our community in the development process to ensure the app meets real-world needs.</div>
+      <div className="about-text"><span className="about-text-underline">Educational Resources:</span> Providing users with resources and support to help them make the most of our technology.</div>
+      <div className="about-text">We believe that by integrating these elements, we can create a more inclusive, effective, and secure platform for all.  More detailed information about the application will be available soon.</div>
+      <img className="about-img" src="img3.jpg" />
+      <div className="about-title" ref={collaborationsRef}>Collaborations</div>
+      <div className="about-text">We proudly collaborate with American University, which supports our research efforts and contributes to the development of our mobile app by providing access to their extensive resources, including faculty expertise, and technical support. Additionally, we are working with non-profits and private attorneys who offer expert legal guidance, help expand our translation and interpretation services, and provide valuable app usability feedback, which we use to better understand their communities and address their needs.</div>
+      <div className="about-text">In these early stages, we plan to collaborate with more organizations and professionals who share our vision of making services more accessible and understandable for everyone through the use of emerging technology. Understanding the importance of privacy, safety, and user empowerment, we are dedicated to ensuring these core values are at the forefront of our initiatives.</div>
+      <div className="about-text">Interested in partnering or collaborating with us? Reach out at <span className="about-text-underline">collaborations@linklegals.com</span>.</div>
+      <img className="about-img-au about-last" src="au.png" />
     </div>
-    <div className="about-guide-mobile" style={{ visibility: scrollY < 65 && !isMobile ? "collapse" : "visible", position: scrollY < 65 ? "absolute" : "fixed", top: scrollY < 65 ? "5px" : "0", justifyContent: !isMobile && "center", paddingLeft: !isMobile && "0" }}>
-      {scrollY >= 65 && !isMobile && <div className="about-guide-mobile-title">► {section}</div>}
-      {isMobile && <button className={"about-guide-mobile-button " + determineMobile(ourStoryRef, researchRef)} onClick={() => scrollToElementWithOffset(ourStoryRef, -40)}>1. Our Story</button>}
-      {isMobile && <button className={"about-guide-mobile-button " + determineMobile(researchRef, collaborationsRef)} onClick={() => scrollToElementWithOffset(researchRef, -40)}>2. Research</button>}
-      {isMobile && <button className={"about-guide-mobile-button " + determineMobile(collaborationsRef, null)} onClick={() => scrollToElementWithOffset(collaborationsRef, -40)}>3. Collaborations</button>}
-    </div>
-    <div className="about-title about-first" ref={ourStoryRef}>Our Story</div>
-    <div className="about-subtitle" ref={innovateRef}>Innovate, Connect, Empower</div>
-    <div className="about-text about-quote">“The future of human work is in specific domain expertise. Understanding the challenges and then using autonomously intelligent technology to help us provide solutions.”</div>
-    <div className="about-text about-jensen">- Jensen Huang</div>
-    <div className="about-text">Our journey starts with recognizing the vital role of domain experts in guiding AI to solve real-world problems. In many sectors, experts see the potential of existing technologies if adapted correctly. Instead of waiting for these changes to happen, we took action to create practical AI-driven tools. We saw an opportunity to make AI beneficial for those with fewer resources by helping them share their stories more effectively.</div>
-    <img className="about-img" src="img1.jpg" />
-    <div className="about-subtitle" ref={identifyingProblemRef}>Identifying the Problem</div>
-    <div className="about-text">Many AI innovations are not addressing the needs of underrepresented communities. Specifically, we identified a few key problems to address:</div>
-    <div className="about-text"><span className="about-text-underline">Repetitive Storytelling:</span> Clients expend valuable time and energy recounting their experiences to multiple individuals involved in their case, resulting in fatigue and the omission of important details.</div>
-    <div className="about-text"><span className="about-text-underline">Limited Options:</span> Time constraints force clients to accept less optimal choices.</div>
-    <div className="about-text"><span className="about-text-underline">Document Complexity:</span> The complex nature of many documents renders them difficult for clients to comprehend.</div>
-    <div className="about-text"><span className="about-text-underline">Language Barriers:</span> These barriers pose substantial challenges to accessing legal services.</div>
-    <img className="about-img" src="img2.jpg" />
-    <div className="about-subtitle" ref={missionVisionRef}>Mission and Vision</div>
-    <div className="about-text">Our mission is to innovate, connect, and empower by creating AI solutions that are advanced, accessible, and socially responsible. We envision a platform that prioritizes user safety and confidentiality.</div>
-    <div className="about-subtitle" ref={initialStepsRef}>Initial Steps and Development</div>
-    <div className="about-text">We began with research to understand our audience"s needs. This led to the development of our mobile app, which in its first phase, offers essential services that will be expanded over time. Currently, the app is in the MVP stage with plans to add more features to make a beta version available to our collaborators for testing. This approach combines AI technology with human expertise to ensure accuracy and reliability.</div>
-    <div className="about-subtitle" ref={innovationCollabRef}>Innovation and Collaboration</div>
-    <div className="about-text">We believe in the power of collaboration. By working with partners, we ensure our solutions are grounded in real-world needs. User privacy and safety are central to our development process, and we are committed to maintaining the highest ethical standards.</div>
-    <div className="about-subtitle" ref={futureGoalsRef}>Future Goals</div>
-    <div className="about-text">Looking ahead, we plan to scale our services and introduce new features that will further empower our users. Our goal is to continuously innovate and improve, making our platform a trusted resource for communities around the world.</div>
-    <div className="about-subtitle" ref={callToActionRef}>Call to Action</div>
-    <div className="about-text">Join us on this journey. Whether you’re a potential user, a collaborator, or simply someone who believes in our mission, we welcome you. Together, we can innovate, connect, and empower.</div>
-    <div className="about-title" ref={researchRef}>Research</div>  
-    <div className="about-text">We are committed to research and innovation to better serve our community and service providers. We're developing a mobile app that uses AI to create practical solutions, prioritizing user safety, confidentiality, and ethical use of emerging technologies.</div>
-    <div className="about-text">Our key initiatives include:</div>
-    <div className="about-text"><span className="about-text-underline">User-Centric Design:</span> Ensuring our app is intuitive and accessible to all users, regardless of their tech proficiency.</div>
-    <div className="about-text"><span className="about-text-underline">Continuous Improvement:</span> Regularly updating our technology and practices based on user feedback and advancements in the field.</div>
-    <div className="about-text"><span className="about-text-underline">Community Engagement:</span> Actively involving our community in the development process to ensure the app meets real-world needs.</div>
-    <div className="about-text"><span className="about-text-underline">Educational Resources:</span> Providing users with resources and support to help them make the most of our technology.</div>
-    <div className="about-text">We believe that by integrating these elements, we can create a more inclusive, effective, and secure platform for all.  More detailed information about the application will be available soon.</div>
-    <img className="about-img" src="img3.jpg" />
-    <div className="about-title" ref={collaborationsRef}>Collaborations</div>
-    <div className="about-text">We proudly collaborate with American University, which supports our research efforts and contributes to the development of our mobile app by providing access to their extensive resources, including faculty expertise, and technical support. Additionally, we are working with non-profits and private attorneys who offer expert legal guidance, help expand our translation and interpretation services, and provide valuable app usability feedback, which we use to better understand their communities and address their needs.</div>
-    <div className="about-text">In these early stages, we plan to collaborate with more organizations and professionals who share our vision of making services more accessible and understandable for everyone through the use of emerging technology. Understanding the importance of privacy, safety, and user empowerment, we are dedicated to ensuring these core values are at the forefront of our initiatives.</div>
-    <div className="about-text">Interested in partnering or collaborating with us? Reach out at <span className="about-text-underline">collaborations@linklegals.com</span>.</div>
-    <img className="about-img-au about-last" src="au.png" />
-  </div>
-  )
+  </>
 }
 
 const Services = ({ isMobile, showMenu }) => {
@@ -235,73 +234,49 @@ const Contact = ({ isMobile, showMenu }) => {
     }
   }
 
-  return (
-  <div className="page" style={{ overflow: showMenu && isMobile ? "hidden" : "auto", height: showMenu && isMobile ? "calc(100vh - 60px)" : "auto" }}>
-    <div className="about-title about-first">Contact</div>
-    <div className="about-text">We are here to help and look forward to connecting with you! Please find the appropriate contact information below for your specific needs.</div>
-    <div className="about-text"><span className="about-text-bold">General Inquiries:</span> For general questions or information about our services, please email us at: <span className="about-text-underline">info@LinkLegals.com</span></div>
-    <div className="about-text"><span className="about-text-bold">Customer Support:</span> If you need assistance with our services, contact us at: <span className="about-text-underline">support@linklegals.com</span></div>
-    <div className="about-text"><span className="about-text-bold">Partnership and Collaboration:</span> Interested in partnering or collaborating with us? Reach out to our collaboration team at: <span className="about-text-underline">collaborations@linklegals.com</span></div>
-    <div className="about-text"><span className="about-text-bold">Media and Press Inquiries:</span> For media and press inquiries, please contact our media relations team: <span className="about-text-underline">press@linklegals.com</span></div>
-    <div className="about-text">You can also use our contact form on this page. We look forward to connecting with you!</div>
-    <form className="contact-form services-last" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className={errors.name ? "input-error" : ""} />
-        {errors.name && <span className="error">{errors.name}</span>}
-      </div>
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className={errors.email ? "input-error" : ""} />
-        {errors.email && <span className="error">{errors.email}</span>}
-      </div>
-      <div className="form-group">
-          <label htmlFor="subject">Subject</label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleChange}
-            className={errors.subject ? "input-error" : ""} />
-          {errors.subject && <span className="error">{errors.subject}</span>}
-      </div>
-      <div className="form-group">
-          <label htmlFor="message">Message</label>
-          <textarea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            className={errors.message ? "input-error" : ""}>
-          </textarea>
-          {errors.message && <span className="error">{errors.message}</span>}
-      </div>
-      <button type="submit" className="submit-button">Submit</button>
-      {isSubmitted && (
-        <div className="success-message">
-          <h2>Thank you for contacting us!</h2>
-          <p>We have received your message and will get back to you shortly.</p>
+  return <>
+    <div className="page" style={{ overflow: showMenu && isMobile ? "hidden" : "auto", height: showMenu && isMobile ? "calc(100vh - 60px)" : "auto" }}>
+      <div className="about-title about-first">Contact</div>
+      <div className="about-text">We are here to help and look forward to connecting with you! Please find the appropriate contact information below for your specific needs.</div>
+      <div className="about-text"><span className="about-text-bold">General Inquiries:</span> For general questions or information about our services, please email us at: <span className="about-text-underline">info@LinkLegals.com</span></div>
+      <div className="about-text"><span className="about-text-bold">Customer Support:</span> If you need assistance with our services, contact us at: <span className="about-text-underline">support@linklegals.com</span></div>
+      <div className="about-text"><span className="about-text-bold">Partnership and Collaboration:</span> Interested in partnering or collaborating with us? Reach out to our collaboration team at: <span className="about-text-underline">collaborations@linklegals.com</span></div>
+      <div className="about-text"><span className="about-text-bold">Media and Press Inquiries:</span> For media and press inquiries, please contact our media relations team: <span className="about-text-underline">press@linklegals.com</span></div>
+      <div className="about-text">You can also use our contact form on this page. We look forward to connecting with you!</div>
+      <form className="contact-form services-last" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className={errors.name ? "input-error" : ""} />
+          {errors.name && <span className="error">{errors.name}</span>}
         </div>
-      )}
-    </form>
-  </div>
-  )
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={errors.email ? "input-error" : ""} />
+          {errors.email && <span className="error">{errors.email}</span>}
+        </div>
+        <div className="form-group">
+            <label htmlFor="subject">Subject</label>
+            <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className={errors.subject ? "input-error" : ""} />
+            {errors.subject && <span className="error">{errors.subject}</span>}
+        </div>
+        <div className="form-group">
+            <label htmlFor="message">Message</label>
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange} className={errors.message ? "input-error" : ""}></textarea>
+            {errors.message && <span className="error">{errors.message}</span>}
+        </div>
+        <button type="submit" className="submit-button">Submit</button>
+        {isSubmitted && (
+          <div className="success-message">
+            <h2>Thank you for contacting us!</h2>
+            <p>We have received your message and will get back to you shortly.</p>
+          </div>
+        )}
+      </form>
+    </div>
+  </>
 }
 
-const BuildYourCase = ({ isMobile, showMenu }) => {
+const BuildYourCase = ({ isMobile, showMenu, language }) => {
   const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState("")
   const [isLoadingReply, setIsLoadingReply] = useState(false)
@@ -310,9 +285,33 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
   const [isExporting, setIsExporting] = useState(false)
   const sentMessageRef = useRef(null)
 
+  const [loginUsername, setLoginUsername] = useState("")
+  const [loginPassword, setLoginPassword] = useState("")
+  const [loginError, setLoginError] = useState("")
+
   const onChatAccessClicked = async () => {
-    setLoggedIn(true)
-    setShowStartText(true)
+    if (!loginUsername.trim() || !loginPassword.trim()) {
+      setLoginError(language === ENGLISH ? "Username and password are required." : "Se requieren nombre de usuario y contraseña.")
+      return
+    }
+    try {
+      const response = await fetch(serverUrl + "login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: loginUsername, password: loginPassword })
+      })
+      if (response.ok) {
+        setLoggedIn(true)
+        setShowStartText(true)
+        setLoginError("")
+      } else {
+        const data = await response.json()
+        setLoginError(language === ENGLISH ? "Invalid credentials." : "Credenciales inválidas.")
+      }
+    } catch (error) {
+      console.error("Login error:", error)
+      setLoginError(language === ENGLISH ? "An error occurred during login." : "Ocurrió un error durante el inicio de sesión.")
+    }
   }
 
   const latexPrompt = `Convert the previous answer into a complete, standalone LaTeX document. Provide only the LaTeX code without any additional text, explanations, or comments. Ensure the response includes:
@@ -345,28 +344,28 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
   
   const renderFormattedText = (text) => {
     if (text.startsWith("####")) {
-      return (
+      return <>
         <div className="text-subtitle">
           {renderBoldText(text.slice(4).trim())}
         </div>
-      )
+      </>
     } else if (text.startsWith("###")) {
-      return (
+      return <>
         <div className="text-title">
           {renderBoldText(text.slice(3).trim())}
         </div>
-      )
+      </>
     } else if (/^\d+\./.test(text)) {
-      return (
+      return <>
         <div className="text-list-item">
           <div>{renderBoldText(text)}</div>
         </div>
-      )
+      </>
     }
     return renderBoldText(text)
   }
 
-  const sendMessage = async (messageText) => {
+  const sendMessage = async (messageText, promptTypeOverride) => {
     if (!loggedIn || !messageText.trim()) return
     setShowStartText(false)
     const newMessage = { text: messageText, side: "right", id: Date.now() }
@@ -384,9 +383,9 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
           })),
         { role: "user", content: messageText }
       ]
-      const payload = { conversation: conversationForApi }
-      if (promptType) {
-        payload.systemPromptType = promptType
+      const payload = {
+        conversation: conversationForApi,
+        systemPromptType: promptTypeOverride
       }
       const response = await fetch(serverUrl + "message", {
         method: "POST",
@@ -474,87 +473,115 @@ const BuildYourCase = ({ isMobile, showMenu }) => {
 
   const [promptType, setPromptType] = useState(null)
 
+  const PromptType = {
+    LEGAL: "legal",
+    N400: "n400",
+    KYR: "kyr",
+    ASYLUM: "asylum"
+  }
+
   const handleStartChat = (type) => {
     setPromptType(type)
     setShowStartText(false)
-    if (type === "legal") {
-      sendMessage("Hello, I need help building my case.")
-    } else if (type === "n400") {
-      sendMessage("Hello, I need helping filling up the N-400 intake.")
+    let messageText = ""
+    if (type === PromptType.LEGAL) {
+      messageText = language === ENGLISH ? "Hello, I need help building my case." : "Hola, necesito ayuda para crear mi caso."
+    } else if (type === PromptType.N400) {
+      messageText = language === ENGLISH ? "Hello, I need helping filling up the N-400 intake." : "Hola, necesito ayuda para rellenar el formulario N-400."
+    } else if (type === PromptType.KYR) {
+      messageText = language === ENGLISH ? "Hello, I need helping with KYR." : "Hola, necesito ayuda con KYR."
+    } else if (type === PromptType.ASYLUM) {
+      messageText = language === ENGLISH ? "Hello, I need helping with asylum case." : "Hola, necesito ayuda con caso de asilo."
     }
+    sendMessage(messageText, type)
   }  
 
-  return (
-  <div
-    className="page"
-    style={{
-      overflow: showMenu && isMobile ? "hidden" : "auto",
-      height: showMenu && isMobile ? "calc(100vh - 60px)" : "auto"
-    }}>
-    {!loggedIn && (
-      <div className="chat-access-wrapper">
-        <div className="chat-access">
-          <div className="chat-access-title">Enter access key</div>
-          <input className="chat-access-input" placeholder="" />
-          <button className="chat-access-button" onClick={onChatAccessClicked}>Start</button>
-        </div>
-      </div>
-    )}
-    <div className="chat">
-      {messages.map((message, index) => {
-        const isLastRightMessage = message.side === "right" && index === messages.length - 2
-        return (
-          <div
-            key={message.id}
-            ref={isLastRightMessage ? sentMessageRef : null}
-            className={`${message.side === "right" ? "chat-message-right" : "chat-message-left"} ${message.type === "title" ? "chat-message-title" : ""} ${message.type === "bullet" ? "chat-message-bullet" : ""}`}>
-            {message.isLoading ? (<div className="loading-spinner"></div>) : (renderFormattedText(message.text))}
-          </div>
-        )
-      })}
-    </div>
-    <div className="chat-input">
-      <input
-        className="chat-input-text"
-        type="text"
-        placeholder="Message Q..."
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && sendMessage(inputValue)} />
-      <div className="chat-bottom">
-        <button
-          className="chat-send-button chat-export-button"
-          onClick={handleExportCaseAsPDF}
-          disabled={isExporting}>
-          {isExporting ? (<SyncLoader className="loader" size={8} color="#ffffff" />) : ("Export case as PDF")}
-        </button>
-        <button className="chat-send-button" onClick={() => sendMessage(inputValue)}>SEND</button>
-      </div>
-      {showStartText && (
-        <div className="chat-start">
-          <div className="chat-start-text">
-            Let's get started building your case. What do you need help with?
-          </div>
-          <div className="chat-start-buttons">
-            <button className="chat-start-button" onClick={() => handleStartChat("legal")}>
-              Legal & Service Case
-            </button>
-            <button className="chat-start-button" onClick={() => handleStartChat("n400")}>
-              N-400
-            </button>
+  return <>
+    <div
+      className="page"
+      style={{
+        overflow: showMenu && isMobile ? "hidden" : "auto",
+        height: showMenu && isMobile ? "calc(100vh - 60px)" : "auto"
+      }}>
+      {!loggedIn && (
+        <div className="chat-access-wrapper">
+          <div className="chat-access">
+            <div className="chat-access-title">{language === ENGLISH ? "Login" : "Iniciar sesión"}</div>
+            <input className="chat-access-input" placeholder={language === ENGLISH ? "Username" : "Nombre de usuario"} value={loginUsername} onChange={(e) => setLoginUsername(e.target.value)} />
+            <input className="chat-access-input" placeholder={language === ENGLISH ? "Password" : "Contraseña"} type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+            {loginError && <div className="chat-access-error">{loginError}</div>}
+            <button className="chat-access-button" onClick={onChatAccessClicked}>{language === ENGLISH ? "Start" : "Empezar"}</button>
           </div>
         </div>
       )}
+      <div className="chat">
+        {messages.map((message, index) => {
+          const isLastRightMessage = message.side === "right" && index === messages.length - 2
+          return <>
+            <div key={message.id} ref={isLastRightMessage ? sentMessageRef : null} className={`${message.side === "right" ? "chat-message-right" : "chat-message-left"} ${message.type === "title" ? "chat-message-title" : ""} ${message.type === "bullet" ? "chat-message-bullet" : ""}`}>
+              {message.isLoading ? (<div className="loading-spinner"></div>) : (renderFormattedText(message.text))}
+            </div>
+          </>
+        })}
+      </div>
+      <div className="chat-input">
+        <input
+          className="chat-input-text"
+          type="text"
+          placeholder={language === ENGLISH ? "Message here..." : "Escribe aqui..."}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage(inputValue)} />
+        <div className="chat-bottom">
+          <button
+            className="chat-send-button chat-export-button"
+            onClick={handleExportCaseAsPDF}
+            disabled={isExporting}>
+            {isExporting ? (<SyncLoader className="loader" size={8} color="#ffffff" />) : (language === ENGLISH ? "Export case as PDF" : "Exporta caso en PDF")}
+          </button>
+          <button className="chat-send-button" onClick={() => sendMessage(inputValue)}>{language === ENGLISH ? "SEND" : "ENVIAR"}</button>
+        </div>
+        {showStartText && (
+          <div className="chat-start">
+            <div className="chat-start-text">
+              {language === ENGLISH ? "Let's get started building your case. What do you need help with?" : "Comencemos a crear su caso. ¿En qué necesita ayuda?"}
+            </div>
+            <div className="chat-start-buttons">
+              <button className="chat-start-button" onClick={() => handleStartChat(PromptType.LEGAL)}>
+                {language === ENGLISH ? "Legal & Service" : "Caso Legal"}
+              </button>
+              <button className="chat-start-button" onClick={() => handleStartChat(PromptType.N400)}>N-400</button>
+              <button className="chat-start-button" onClick={() => handleStartChat(PromptType.KYR)}>{language === ENGLISH ? "Know Your Rights (KYR)" : "Conoce Tus Derechos (KYR)"}</button>
+              <button className="chat-start-button" onClick={() => handleStartChat(PromptType.ASYLUM)}>{language === ENGLISH ? "Asylum" : "Asilo"}</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-  )
+  </>
 }
 
 const BackgroundGradient = () => {
-    const location = useLocation()
-    return <>
-        <div className="background-gradient" style={{ height: location.pathname === "/" ? "100vh" : "5px", top: location.pathname === "/" ? "0" : "60px", zIndex: location.pathname === "/" ? "-1" : "2" }} />
-    </>
+  const location = useLocation()
+  return <>
+    <div className="background-gradient" style={{ height: location.pathname === "/" ? "100vh" : "5px", top: location.pathname === "/" ? "0" : "60px", zIndex: location.pathname === "/" ? "-1" : "2" }} />
+  </>
+}
+
+const ESPAÑOL = "español"
+const ENGLISH = "english"
+
+const Language = ({ languageOpen, setLanguageOpen, setLanguage, isMobile, showMenu }) => {
+  return <>
+    <button className={isMobile ? "language-button-mobile" : "language-button"} onClick={() => setLanguageOpen(!languageOpen)}>
+      <img className="language-icon" src="language.png" />
+      <div>Language/Idioma</div>
+      {languageOpen && ((isMobile && !showMenu) || !isMobile) ? <div className="language-selector">
+        <button className="language-selector-button" onClick={() => setLanguage(ESPAÑOL)}>Español</button>
+        <button className="language-selector-button" onClick={() => setLanguage(ENGLISH)}>English</button>
+      </div> : null}
+    </button>
+  </>
 }
 
 const App = () => {
@@ -605,38 +632,41 @@ const App = () => {
     setIsSafari(isSafariBrowser)
   }, [isMobile])
 
-  return (
-  <>
-  {!isSafari || isMobile ? <Router>
-    <div className="app">
-    <BackgroundGradient />
-      <nav>
-        <div className="nav-content">
-          <img className="logo" src="logo.png" />
-          {showMenu ? <div className="nav-right">
-            <Link to="/" onClick={onLinkClick} className="nav-button">Home</Link>
-            <Link to="/about" onClick={onLinkClick} className="nav-button">About</Link>
-            <Link to="/services" onClick={onLinkClick} className="nav-button">Services</Link>
-            <Link to="/contact" onClick={onLinkClick} className="nav-button">Contact</Link>
-            <Link to="/buid-your-case" onClick={onLinkClick} className="nav-button">Build Your Case</Link>
-            <div className="nav-right-background" />
-          </div> : null}
-          <button className="menu" onClick={() => setShowMenu(!showMenu)}>
-            <img className="menu-icon" src="menu.png" />
-          </button>
-        </div>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About isMobile={isMobile} showMenu={showMenu} scrollY={scrollY} />} />
-        <Route path="/services" element={<Services isMobile={isMobile} showMenu={showMenu} />} />
-        <Route path="/contact" element={<Contact isMobile={isMobile} showMenu={showMenu} />} />
-        <Route path="/buid-your-case" element={<BuildYourCase isMobile={isMobile} showMenu={showMenu} />} />
-      </Routes>
-    </div>
-  </Router> : <div>This website doesn't work on Safari. Try using Google Chrome.</div>}
+  const [languageOpen, setLanguageOpen] = useState(false)
+  const [language, setLanguage] = useState(ESPAÑOL)
+
+  return <>
+    {!isSafari || isMobile ? <Router>
+      <div className="app">
+      <BackgroundGradient />
+        <nav>
+          <div className="nav-content">
+            <img className="logo" src="logo.png" />
+            {showMenu ? <div className="nav-right">
+              <Link to="/" onClick={onLinkClick} className="nav-button">{language === ENGLISH ? "Home" : "Inicio"}</Link>
+              <Link to="/about" onClick={onLinkClick} className="nav-button">{language === ENGLISH ? "About": "Info"}</Link>
+              <Link to="/services" onClick={onLinkClick} className="nav-button">{language === ENGLISH ? "Services" : "Servicios"}</Link>
+              <Link to="/contact" onClick={onLinkClick} className="nav-button">{language === ENGLISH ? "Contact" : "Contacto"}</Link>
+              <Link to="/buid-your-case" onClick={onLinkClick} className="nav-button">{language === ENGLISH ? "Build Your Case" : "Crea Tu Caso"}</Link>
+              <div className="nav-right-background" />
+              <Language languageOpen={languageOpen} setLanguageOpen={setLanguageOpen} setLanguage={setLanguage} isMobile={isMobile} showMenu={showMenu} />
+            </div> : null}
+            <button className="menu" onClick={() => setShowMenu(!showMenu)}>
+              <img className="menu-icon" src="menu.png" />
+            </button>
+            {!showMenu && <Language languageOpen={languageOpen} setLanguageOpen={setLanguageOpen} setLanguage={setLanguage} isMobile={isMobile} showMenu={showMenu} />}
+          </div>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About isMobile={isMobile} showMenu={showMenu} scrollY={scrollY} />} />
+          <Route path="/services" element={<Services isMobile={isMobile} showMenu={showMenu} />} />
+          <Route path="/contact" element={<Contact isMobile={isMobile} showMenu={showMenu} />} />
+          <Route path="/buid-your-case" element={<BuildYourCase isMobile={isMobile} showMenu={showMenu} language={language} />} />
+        </Routes>
+      </div>
+    </Router> : <div>This website doesn't work on Safari. Try using Google Chrome.</div>}
   </>
-  )
 }
 
 export default App

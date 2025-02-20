@@ -29,6 +29,13 @@ const openai = new OpenAI({
 const systemPromptPath = path.join(__dirname, "q.txt")
 const SYSTEM_PROMPT = fs.readFileSync(systemPromptPath, "utf8")
 
+const PromptType = {
+  LEGAL: "legal",
+  N400: "n400",
+  KYR: "kyr",
+  ASYLUM: "asylum"
+}
+
 app.post("/message", async (req, res, next) => {
   try {
     const { message, conversation, systemPromptType } = req.body
@@ -40,7 +47,16 @@ app.post("/message", async (req, res, next) => {
     } else {
       return res.status(400).json({ error: "No message provided." })
     }
-    const promptFile = systemPromptType === "n400" ? "n400.txt" : "q.txt"
+    let promptFile = ""
+    if (systemPromptType === PromptType.LEGAL) {
+      promptFile = "q.txt"
+    } else if (systemPromptType === PromptType.N400) {
+      promptFile = "n400.txt"
+    } else if (systemPromptType === PromptType.KYR) {
+      promptFile = "kyr.txt"
+    } else if (systemPromptType === PromptType.ASYLUM) {
+      promptFile = "asylum.txt"
+    }
     const systemPromptContent = fs.readFileSync(path.join(__dirname, promptFile), "utf8")
     messages.unshift({ role: "system", content: systemPromptContent })
     const completion = await openai.chat.completions.create({
@@ -89,6 +105,76 @@ app.use((err, req, res, next) => {
 
 app.get("/", (req, res) => {
   res.status(200).send("OK")
+})
+
+const mysql = require("mysql2/promise")
+const bcrypt = require("bcrypt")
+const SALT_ROUNDS = 10
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+})
+
+const initializeDatabase = async () => {
+  try {
+    const query = `
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL
+      )`
+    await pool.execute(query)
+    console.log("Users table is ready.")
+  } catch (error) {
+    console.error("Error creating users table:", error)
+  }
+}
+initializeDatabase()
+
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and password are required." })
+  }
+  try {
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+    await pool.execute(
+      "INSERT INTO users (username, password) VALUES (?, ?)",
+      [username, hashedPassword]
+    )
+    res.status(201).json({ message: "User created successfully." })
+  } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(409).json({ error: "Username already exists." })
+    }
+    console.error("Error registering user:", error)
+    res.status(500).json({ error: "Database error." })
+  }
+})
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and password are required." })
+  }
+  try {
+    const [rows] = await pool.execute("SELECT * FROM users WHERE username = ?", [username])
+    if (rows.length === 0) {
+      return res.status(401).json({ error: "Invalid credentials." })
+    }
+    const user = rows[0]
+    const validPassword = await bcrypt.compare(password, user.password)
+    if (!validPassword) {
+      return res.status(401).json({ error: "Invalid credentials." })
+    }
+    res.status(200).json({ message: "Login successful." })
+  } catch (error) {
+    console.error("Error logging in:", error)
+    res.status(500).json({ error: "Database error." })
+  }
 })
 
 const PORT = process.env.PORT || 3000

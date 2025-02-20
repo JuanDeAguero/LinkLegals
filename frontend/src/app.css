@@ -11,6 +11,7 @@ nav {
   justify-content: center;
   backdrop-filter: blur(300px);
   z-index: 2;
+  overflow: visible;
 }
 .nav-content {
   height: 100%;
@@ -18,6 +19,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   width: 1000px;
+  overflow: visible;
 }
 .menu {
   visibility: hidden;
@@ -29,6 +31,8 @@ nav {
 }
 .nav-right {
   display: flex;
+  align-items: center;
+  overflow: visible;
 }
 .nav-button {
   font-size: 16px;
@@ -123,6 +127,9 @@ footer {
   position: relative;
   width: 1000px;
   overflow: hidden;
+}
+.about-arrow {
+  font-size: 12px;
 }
 .about-img {
   margin-top: 30px;
@@ -409,8 +416,9 @@ footer {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 150px;
   width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .chat-access-title {
   font-size: 20px;
@@ -418,9 +426,9 @@ footer {
   margin-bottom: 10px;
 }
 .chat-access-input {
-  font-size: 17px;
+  font-size: 16px;
   border-radius: 5px;
-  height: 40px;
+  height: 35px;
   border-style: solid;
   margin-bottom: 10px;
   padding-left: 15px;
@@ -438,26 +446,31 @@ footer {
 .chat-access-button:hover {
   background-color: rgb(50, 132, 255);
 }
+.chat-access-error {
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: rgb(255, 0, 0);
+}
 .chat-start {
   position: absolute;
   width: 100%;
   display: flex;
   justify-content: center;
-  top: -140px;
+  top: -170px;
   display: flex;
   flex-direction: column;
 }
 .chat-start-text {
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   margin-bottom: 30px;
 }
 .chat-start-buttons {
   display: flex;
   justify-content: center;
-  height: 50px;
   gap: 10px;
   overflow: visible;
+  flex-wrap: wrap;
 }
 .chat-start-button {
   background-color: rgb(220, 220, 220);
@@ -466,7 +479,7 @@ footer {
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 5px;
-  font-size: 17px;
+  font-size: 15px;
 }
 .chat-start-button:hover {
   background-color: rgb(210, 210, 210);
@@ -524,6 +537,7 @@ footer {
   .nav-button {
     margin-left: 0;
     border-radius: 0;
+    width: 100%;
   }
   .nav-right {
     padding-top: 20px;
@@ -533,6 +547,7 @@ footer {
     width: 100%;
     background-color: rgb(240, 240, 240, 0.5);
     height: calc(100vh - 60px);
+    align-items: flex-start;
   }
   .nav-right-background {
     position: absolute;
@@ -590,4 +605,54 @@ footer {
 }
 .text-list-item {
   padding-left: 10px;
+}
+.language-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 30px;
+  position: relative;
+  overflow: visible;
+}
+.language-button-mobile {
+  top: 5px;
+  right: 60px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+}
+.language-selector {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 200px;
+  background-color: rgb(245, 245, 245);
+  top: 70px;
+  right: -30px;
+  border-radius: 10px;
+  border-style: solid;
+  border-color: rgb(200, 200, 200);
+  padding-top: 5px;
+  padding-bottom: 6px;
+}
+.language-icon {
+  width: 30px;
+  margin-bottom: 0px;
+  opacity: 0.8;
+}
+.language-icon:hover {
+  scale: 105%;
+}
+.language-selector-button {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-left: 10px;
+}
+.language-selector-button:hover {
+  background-color: rgb(230, 230, 230);
 }
