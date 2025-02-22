@@ -284,7 +284,6 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
   const [showStartText, setShowStartText] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const sentMessageRef = useRef(null)
-
   const [loginUsername, setLoginUsername] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
   const [loginError, setLoginError] = useState("")
@@ -365,12 +364,17 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
     return renderBoldText(text)
   }
 
-  const sendMessage = async (messageText, promptTypeOverride) => {
+  const sendMessage = async (messageText, promptTypeOverride, isInitialMessage = false) => {
     if (!loggedIn || !messageText.trim()) return
     setShowStartText(false)
-    const newMessage = { text: messageText, side: "right", id: Date.now() }
+    const newMessage = {
+      text: messageText,
+      side: "right",
+      id: Date.now(),
+      hidden: isInitialMessage
+    }
     const loadingMessage = { text: "", side: "left", id: Date.now() + 1, isLoading: true }
-    setMessages((prev) => [...prev, newMessage, loadingMessage])
+    setMessages((prev) => [...prev,  ...(isInitialMessage ? [] : [newMessage]), loadingMessage])
     setInputValue("")
     setIsLoadingReply(true)
     try {
@@ -485,15 +489,15 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
     setShowStartText(false)
     let messageText = ""
     if (type === PromptType.LEGAL) {
-      messageText = language === ENGLISH ? "Hello, I need help building my case." : "Hola, necesito ayuda para crear mi caso."
+      messageText = language === ENGLISH ? "Hello." : "Hola."
     } else if (type === PromptType.N400) {
-      messageText = language === ENGLISH ? "Hello, I need helping filling up the N-400 intake." : "Hola, necesito ayuda para rellenar el formulario N-400."
+      messageText = language === ENGLISH ? "Hello." : "Hola."
     } else if (type === PromptType.KYR) {
-      messageText = language === ENGLISH ? "Hello, I need helping with KYR." : "Hola, necesito ayuda con KYR."
+      messageText = language === ENGLISH ? "Hello." : "Hola."
     } else if (type === PromptType.ASYLUM) {
-      messageText = language === ENGLISH ? "Hello, I need helping with asylum case." : "Hola, necesito ayuda con caso de asilo."
+      messageText = language === ENGLISH ? "Hello." : "Hola."
     }
-    sendMessage(messageText, type)
+    sendMessage(messageText, type, true)
   }  
 
   return <>
@@ -525,18 +529,9 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
         })}
       </div>
       <div className="chat-input">
-        <input
-          className="chat-input-text"
-          type="text"
-          placeholder={language === ENGLISH ? "Message here..." : "Escribe aqui..."}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage(inputValue)} />
+        <input className="chat-input-text" type="text" placeholder={language === ENGLISH ? "Message here..." : "Escribe aqui..."} value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage(inputValue)} />
         <div className="chat-bottom">
-          <button
-            className="chat-send-button chat-export-button"
-            onClick={handleExportCaseAsPDF}
-            disabled={isExporting}>
+          <button className="chat-send-button chat-export-button" onClick={handleExportCaseAsPDF} disabled={isExporting}>
             {isExporting ? (<SyncLoader className="loader" size={8} color="#ffffff" />) : (language === ENGLISH ? "Export case as PDF" : "Exporta caso en PDF")}
           </button>
           <button className="chat-send-button" onClick={() => sendMessage(inputValue)}>{language === ENGLISH ? "SEND" : "ENVIAR"}</button>

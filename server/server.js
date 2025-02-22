@@ -47,18 +47,33 @@ app.post("/message", async (req, res, next) => {
     } else {
       return res.status(400).json({ error: "No message provided." })
     }
-    let promptFile = ""
-    if (systemPromptType === PromptType.LEGAL) {
-      promptFile = "q.txt"
-    } else if (systemPromptType === PromptType.N400) {
-      promptFile = "n400.txt"
-    } else if (systemPromptType === PromptType.KYR) {
-      promptFile = "kyr.txt"
-    } else if (systemPromptType === PromptType.ASYLUM) {
-      promptFile = "asylum.txt"
+    let promptFile = "q.txt"
+    if (systemPromptType) {
+      switch(systemPromptType) {
+        case PromptType.LEGAL:
+          promptFile = "q.txt"
+          break
+        case PromptType.N400:
+          promptFile = "n400.txt"
+          break
+        case PromptType.KYR:
+          promptFile = "kyr.txt"
+          break
+        case PromptType.ASYLUM:
+          promptFile = "asylum.txt"
+          break
+        default:
+          promptFile = "q.txt"
+      }
     }
-    const systemPromptContent = fs.readFileSync(path.join(__dirname, promptFile), "utf8")
-    messages.unshift({ role: "system", content: systemPromptContent })
+    const systemPromptPath = path.join(__dirname, promptFile)
+    try {
+      const systemPromptContent = fs.readFileSync(systemPromptPath, "utf8")
+      messages.unshift({ role: "system", content: systemPromptContent })
+    } catch (error) {
+      console.error(`Error reading prompt file ${promptFile}:`, error)
+      messages.unshift({ role: "system", content: SYSTEM_PROMPT })
+    }
     const completion = await openai.chat.completions.create({
       model,
       messages,
