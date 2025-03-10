@@ -319,6 +319,7 @@ footer {
   margin-bottom: 0;
   padding-bottom: 5px;
   padding-top: 5px;
+  white-space: pre-line;
 }
 .chat-message-title {
   font-weight: 500;
@@ -459,6 +460,7 @@ footer {
   top: -170px;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 .chat-start-text {
   font-size: 16px;
@@ -636,6 +638,7 @@ footer {
   border-color: rgb(200, 200, 200);
   padding-top: 5px;
   padding-bottom: 6px;
+  border-width: 1px;
 }
 .language-icon {
   width: 30px;
@@ -655,4 +658,20 @@ footer {
 }
 .language-selector-button:hover {
   background-color: rgb(230, 230, 230);
+}
+.text-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.text-subtitle {
+  font-size: 18px;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+.text-list-item {
+  padding-left: 10px;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
 }

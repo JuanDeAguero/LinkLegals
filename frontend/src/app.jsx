@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react
 import { useRef, useState, useEffect } from "react"
 import { SyncLoader } from "react-spinners"
 
-const serverUrl = "https://linklegals.net/"
-//const serverUrl = "http://localhost:3000/"
+//const serverUrl = "https://linklegals.net/"
+const serverUrl = "http://localhost:3000/"
 
 const Home = () => <div className="landing-page">
   <div className="landing-page-content">
@@ -283,7 +283,6 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [showStartText, setShowStartText] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
-  const sentMessageRef = useRef(null)
   const [loginUsername, setLoginUsername] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
   const [loginError, setLoginError] = useState("")
@@ -319,16 +318,6 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
     3. Proper document structure with \\begin{document} and \\end{document}.
     4. Proper formatting for text, headings, lists, tables, or any other elements present in the answer.
     5. No additional text like "Here is your LaTeX code" or "Copy and paste this into Overleaf"—just the raw LaTeX code.`
-
-  function createMultilineMessages(text) {
-    const lines = text.split("\n")
-    const nonEmptyLines = lines.filter((line) => line.trim() !== "")
-    return nonEmptyLines.map((line) => ({
-      text: line,
-      side: "left",
-      id: Date.now() + Math.random(),
-    }))
-  }
   
   const renderBoldText = (text) => {
     const parts = text.split(/(\*{1,2}[^*]+?\*{1,2})/g)
@@ -342,26 +331,25 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
   }
   
   const renderFormattedText = (text) => {
-    if (text.startsWith("####")) {
-      return <>
-        <div className="text-subtitle">
-          {renderBoldText(text.slice(4).trim())}
+    return text.split('\n').map((line, index) => {
+      if (line.startsWith("####")) {
+        return <div key={index} className="text-subtitle">
+          {renderBoldText(line.slice(4).trim())}
         </div>
-      </>
-    } else if (text.startsWith("###")) {
-      return <>
-        <div className="text-title">
-          {renderBoldText(text.slice(3).trim())}
+      } else if (line.startsWith("###")) {
+        return <div key={index} className="text-title">
+          {renderBoldText(line.slice(3).trim())}
         </div>
-      </>
-    } else if (/^\d+\./.test(text)) {
-      return <>
-        <div className="text-list-item">
-          <div>{renderBoldText(text)}</div>
+      } else if (/^\d+\./.test(line)) {
+        return <div key={index} className="text-list-item">
+          {renderBoldText(line)}
         </div>
-      </>
-    }
-    return renderBoldText(text)
+      } else if (line.trim() === '') {
+        return <div key={index} style={{ height: '0.5em' }} />
+      } else {
+        return <div key={index}>{renderBoldText(line)}</div>
+      }
+    })
   }
 
   const sendMessage = async (messageText, promptTypeOverride, isInitialMessage = false) => {
@@ -373,8 +361,8 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
       id: Date.now(),
       hidden: isInitialMessage
     }
-    const loadingMessage = { text: "", side: "left", id: Date.now() + 1, isLoading: true }
-    setMessages((prev) => [...prev,  ...(isInitialMessage ? [] : [newMessage]), loadingMessage])
+    const streamingMessage = { text: "", side: "left", id: Date.now() + 1, isLoading: true }
+    setMessages((prev) => [...prev, ...(isInitialMessage ? [] : [newMessage]), streamingMessage])
     setInputValue("")
     setIsLoadingReply(true)
     try {
@@ -396,18 +384,48 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       })
-      const data = await response.json()
-      setMessages((prevMessages) =>
-        prevMessages.filter((m) => m.id !== loadingMessage.id))
-      const serverReplyText = data.reply || ""
-      const multilineMessages = createMultilineMessages(serverReplyText)
-      setMessages((prevMessages) => [...prevMessages, ...multilineMessages])
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let isFirstChunk = true
+      let buffer = ""
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        const chunk = decoder.decode(value)
+        const lines = chunk.split('\n')
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(5)
+            if (data === '[DONE]') break
+            try {
+              const { content } = JSON.parse(data)
+              setMessages((prevMessages) => {
+                const lastMessage = prevMessages[prevMessages.length - 1]
+                if (lastMessage.id === streamingMessage.id) {
+                  if (isFirstChunk) {
+                    isFirstChunk = false
+                    return [
+                      ...prevMessages.slice(0, -1),
+                      { ...lastMessage, text: content, isLoading: false }
+                    ]
+                  }
+                  return [
+                    ...prevMessages.slice(0, -1),
+                    { ...lastMessage, text: lastMessage.text + content }
+                  ]
+                }
+                return prevMessages
+              })
+            } catch (e) {
+              console.error('Error parsing streaming message:', e)
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error("An error occurred while sending the message:", error)
-      setMessages((prevMessages) =>
-        prevMessages.filter((m) => m.id !== loadingMessage.id))
       setMessages((prevMessages) => [
-        ...prevMessages,
+        ...prevMessages.filter(m => m.id !== streamingMessage.id),
         {
           text: "Error sending message. Please try again later.",
           side: "left",
@@ -435,7 +453,10 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
       const response = await fetch(serverUrl + "message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ conversation: conversationForExport })
+        body: JSON.stringify({ 
+          conversation: conversationForExport,
+          stream: false
+        })
       })
       const data = await response.json()
       let latexResponse = data.reply || ""
@@ -468,12 +489,6 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
       }, 3000)
     }
   }
-
-  useEffect(() => {
-    if (sentMessageRef.current) {
-      sentMessageRef.current.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [messages])
 
   const [promptType, setPromptType] = useState(null)
 
@@ -519,14 +534,11 @@ const BuildYourCase = ({ isMobile, showMenu, language }) => {
         </div>
       )}
       <div className="chat">
-        {messages.map((message, index) => {
-          const isLastRightMessage = message.side === "right" && index === messages.length - 2
-          return <>
-            <div key={message.id} ref={isLastRightMessage ? sentMessageRef : null} className={`${message.side === "right" ? "chat-message-right" : "chat-message-left"} ${message.type === "title" ? "chat-message-title" : ""} ${message.type === "bullet" ? "chat-message-bullet" : ""}`}>
-              {message.isLoading ? (<div className="loading-spinner"></div>) : (renderFormattedText(message.text))}
-            </div>
-          </>
-        })}
+        {messages.map((message, index) => (
+          <div key={message.id} className={`${message.side === "right" ? "chat-message-right" : "chat-message-left"} ${message.type === "title" ? "chat-message-title" : ""} ${message.type === "bullet" ? "chat-message-bullet" : ""}`} style={{ whiteSpace: 'pre-line' }}>
+            {message.isLoading ? (<div className="loading-spinner"></div>) : (renderFormattedText(message.text))}
+          </div>
+        ))}
       </div>
       <div className="chat-input">
         <input className="chat-input-text" type="text" placeholder={language === ENGLISH ? "Message here..." : "Escribe aqui..."} value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage(inputValue)} />

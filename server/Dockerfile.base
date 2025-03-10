@@ -1,0 +1,17 @@
+FROM node:18-slim
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  build-essential \
+  python3 \
+  texlive-latex-base \
+  texlive-fonts-recommended \
+  texlive-fonts-extra \
+  texlive-latex-extra && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+# docker buildx build -f Dockerfile.base \
+# --platform linux/amd64 \
+# -t 864899836744.dkr.ecr.eu-central-1.amazonaws.com/linklegals-base:latest \
+# --push .

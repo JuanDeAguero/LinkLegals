@@ -38,7 +38,7 @@ const PromptType = {
 
 app.post("/message", async (req, res, next) => {
   try {
-    const { message, conversation, systemPromptType } = req.body
+    const { message, conversation, systemPromptType, stream = true } = req.body
     let messages = []
     if (conversation && Array.isArray(conversation)) {
       messages = conversation
@@ -77,9 +77,24 @@ app.post("/message", async (req, res, next) => {
     const completion = await openai.chat.completions.create({
       model,
       messages,
+      stream,
     })
-    const reply = completion.choices[0].message.content
-    res.json({ reply })
+    if (stream) {
+      res.setHeader("Content-Type", "text/event-stream")
+      res.setHeader("Cache-Control", "no-cache")
+      res.setHeader("Connection", "keep-alive")
+      for await (const chunk of completion) {
+        const content = chunk.choices[0]?.delta?.content || ''
+        if (content) {
+          res.write(`data: ${JSON.stringify({ content })}\n\n`)
+        }
+      }
+      res.write('data: [DONE]\n\n')
+      res.end()
+    } else {
+      const reply = completion.choices[0].message.content
+      res.json({ reply })
+    }
   } catch (error) {
     next(error)
   }
@@ -87,10 +102,16 @@ app.post("/message", async (req, res, next) => {
 
 app.post("/compile-latex", async (req, res, next) => {
   try {
-    const latexCode = req.body.latex
+    let latexCode = req.body.latex
     if (!latexCode) {
       return res.status(400).send("No LaTeX code provided.")
     }
+    latexCode = latexCode
+      .replace(/[\u{1F300}-\u{1F9FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]/gu, '')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, '-')
+      .replace(/\u2026/g, '...')
     const fileName = `temp_${Date.now()}`
     const texFilePath = path.join(__dirname, `${fileName}.tex`)
     const pdfFilePath = path.join(__dirname, `${fileName}.pdf`)
